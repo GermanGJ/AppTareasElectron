@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+    
+</head>
+<body>
+    <div class="container mt-5">
+        <h1><i class="fa fa-trash"></i></h1>
+        <h1><i class="fa fa-trash-alt"></i></h1>
+       
+
+        <form id="form-item" action="">
+            <div class="form-group">
+                <label for="">Item</label>
+                <input class="form-control" type="text" name="item">
+            </div>
+        
+            <button type="submit" class="btn btn-success">Enviar</button>
+        
+        </form>
+
+        <ul id="my-list" class="list-group mt-4">
+            
+        </ul>
+    </div>
+
+    <script>
+        var list = ["Manzanas","Peras"]
+
+        function itemsPrint(){
+
+            document.querySelector("#my-list").innerHTML = "";
+
+            for(i=0; i<list.length; i++){
+                item = document.createElement("li");
+                item.textContent = list[i];
+                item.className = "list-group-item";
+                console.log("item");
+                document.querySelector("#my-list").appendChild(item);
+            }
+        }
+
+        function itemCreate(){
+            
+            item = document.querySelector("[name=item]");
+
+            if (item.value.trim() != ""){
+                list.push(item.value.trim());
+                item.value = "";
+                itemsPrint();
+            }
+        }
+
+        document.querySelector("#form-item").addEventListener("submit", createItem);
+        function createItem(event){
+            event.preventDefault();
+            console.log("Enviado");
+            itemCreate();
+        }
+
+        document.querySelector("[name=item]").addEventListener("keyup", function(event) {
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                // Cancel the default action, if needed
+                event.preventDefault();
+                itemCreate();
+            }
+        });
+
+
+        itemsPrint();
+
+    </script>
+
+    <script>
+        window.jQuery = window.$ = require('jquery');
+    </script>    
+
+    <!--
+    <script src="./node_modules/jquery/dist/jquery.min.js"></script>
+    -->
+    <script src="./node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>
