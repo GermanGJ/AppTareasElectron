@@ -10,11 +10,7 @@
     
 </head>
 <body>
-    <div class="container mt-5">
-        <h1><i class="fa fa-trash"></i></h1>
-        <h1><i class="fa fa-trash-alt"></i></h1>
-       
-
+    <div class="container mt-5">       
         <form id="form-item" action="">
             <div class="form-group">
                 <label for="">Item</label>
@@ -31,7 +27,15 @@
     </div>
 
     <script>
-        var list = ["Manzanas","Peras"]
+
+        var { ipcRenderer} = require('electron');
+
+        var list = ["Uno","Dos","Tres","Cuatro"]
+
+        ipcRenderer.send('item-send');
+        ipcRenderer.on('item-all',(event,data) => {
+
+        });
 
         function itemsPrint(){
 
@@ -40,11 +44,41 @@
             for(i=0; i<list.length; i++){
                 item = document.createElement("li");
                 item.textContent = list[i];
-                item.className = "list-group-item";
+                item.className = "list-group-item d-flex justify-content-between align-items-center";
+                item.setAttribute("data-id",i);
                 console.log("item");
+
+                bg = document.createElement("button");
+                //bg.textContent = "X";
+                bg.className = "btn btn-danger badge item-delete";
+                bg.addEventListener("click",itemDelete);
+                
+                ic = document.createElement("i");
+                ic.className = "fa fa-trash";
+                
+                bg.appendChild(ic);
+                item.appendChild(bg);
+
                 document.querySelector("#my-list").appendChild(item);
             }
         }
+
+        function itemDelete(event){
+            
+            item = event.target.parentElement.parentElement;
+            list.splice(item.getAttribute("data-id"),1);
+            itemsPrint();
+
+            /*
+            if (event.target.tagName == "I"){
+                item.remove();
+            }else{
+                item.remove();
+            }
+            */
+        }
+
+        //document.querySelector(".item-delete").addEventListener("click",itemCreate);
 
         function itemCreate(){
             
@@ -52,6 +86,7 @@
 
             if (item.value.trim() != ""){
                 list.push(item.value.trim());
+                ipcRenderer.send('item-save',item.value.trim());
                 item.value = "";
                 itemsPrint();
             }
@@ -72,7 +107,6 @@
                 itemCreate();
             }
         });
-
 
         itemsPrint();
 
